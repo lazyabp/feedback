@@ -25,7 +25,7 @@ namespace Lazy.Abp.FeedbackKit
                 options.Resources
                     .Add<FeedbackKitResource>("en")
                     .AddBaseTypes(typeof(AbpValidationResource))
-                    .AddVirtualJson("/Localization/FeedbackKit");
+                    .AddVirtualJson("/Lazy/Abp/FeedbackKit/Localization/FeedbackKit");
             });
 
             Configure<AbpExceptionLocalizationOptions>(options =>
