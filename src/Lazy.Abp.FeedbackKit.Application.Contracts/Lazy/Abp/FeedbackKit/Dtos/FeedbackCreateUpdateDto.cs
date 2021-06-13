@@ -19,8 +19,8 @@ namespace Lazy.Abp.FeedbackKit.Dtos
 
         public string Content { get; set; }
 
-        public bool IsReply { get; set; }
+        //public bool IsReply { get; set; }
 
-        public string ReplyContent { get; set; }
+        //public string ReplyContent { get; set; }
     }
 }

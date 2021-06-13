@@ -11,7 +11,7 @@ namespace Lazy.Abp.FeedbackKit.Permissions
             var myGroup = context.AddGroup(FeedbackKitPermissions.GroupName, L("Permission:FeedbackKit"));
 
             var feedbackPermission = myGroup.AddPermission(FeedbackKitPermissions.Feedback.Default, L("Permission:Feedback"));
-            feedbackPermission.AddChild(FeedbackKitPermissions.Feedback.Create, L("Permission:Create"));
+            //feedbackPermission.AddChild(FeedbackKitPermissions.Feedback.Create, L("Permission:Create"));
             feedbackPermission.AddChild(FeedbackKitPermissions.Feedback.Delete, L("Permission:Delete"));
             feedbackPermission.AddChild(FeedbackKitPermissions.Feedback.Management, L("Permission:Management"));
             feedbackPermission.AddChild(FeedbackKitPermissions.Feedback.Reply, L("Permission:Reply"));

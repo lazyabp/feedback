@@ -14,7 +14,7 @@ namespace Lazy.Abp.FeedbackKit.Permissions
         public class Feedback
         {
             public const string Default = GroupName + ".Feedback";
-            public const string Create = Default + ".Create";
+            //public const string Create = Default + ".Create";
             public const string Delete = Default + ".Delete";
             public const string Management = Default + ".Management";
             public const string Reply = Default + ".Reply";

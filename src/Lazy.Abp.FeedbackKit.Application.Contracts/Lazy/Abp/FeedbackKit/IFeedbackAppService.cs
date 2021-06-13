@@ -14,6 +14,8 @@ namespace Lazy.Abp.FeedbackKit
         
         Task<PagedResultDto<FeedbackDto>> GetManagementListAsync(FeedbackListRequestDto input);
 
+        Task<FeedbackDto> ReplyAsync(Guid id, ReplyDto input);
+
         Task<FeedbackDto> CreateAsync(FeedbackCreateUpdateDto input);
 
         Task DeleteAsync(Guid id);

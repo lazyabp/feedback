@@ -55,5 +55,12 @@ namespace Lazy.Abp.FeedbackKit
         {
             return _service.DeleteAsync(id);
         }
+
+        [HttpPut]
+        [Route("management/{id}/reply")]
+        public Task<FeedbackDto> ReplyAsync(Guid id, ReplyDto input)
+        {
+            return _service.ReplyAsync(id, input);
+        }
     }
 }

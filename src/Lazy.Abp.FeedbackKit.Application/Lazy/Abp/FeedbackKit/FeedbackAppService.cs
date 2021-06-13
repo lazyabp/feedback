@@ -10,6 +10,7 @@ using System.Collections.Generic;
 
 namespace Lazy.Abp.FeedbackKit
 {
+    [Authorize]
     public class FeedbackAppService : ApplicationService, IFeedbackAppService
     {
         private readonly IFeedbackRepository _repository;
@@ -19,7 +20,6 @@ namespace Lazy.Abp.FeedbackKit
             _repository = repository;
         }
 
-        [Authorize(FeedbackKitPermissions.Feedback.Default)]
         public async Task<FeedbackDto> GetAsync(Guid id)
         {
             var feedback = await _repository.GetAsync(id);
@@ -27,7 +27,6 @@ namespace Lazy.Abp.FeedbackKit
             return ObjectMapper.Map<Feedback, FeedbackDto>(feedback);
         }
 
-        [Authorize(FeedbackKitPermissions.Feedback.Default)]
         public async Task<PagedResultDto<FeedbackDto>> GetListAsync(FeedbackListRequestDto input)
         {
             var count = await _repository.GetCountAsync(CurrentUser.GetId(), input.Module, input.IsReply, input.CreationAfter, input.CreationBefore, input.Filter);
@@ -51,20 +50,36 @@ namespace Lazy.Abp.FeedbackKit
             );
         }
 
-        [Authorize(FeedbackKitPermissions.Feedback.Create)]
+        [Authorize(FeedbackKitPermissions.Feedback.Reply)]
+        public async Task<FeedbackDto> ReplyAsync(Guid id, ReplyDto input)
+        {
+            var feedback = await _repository.GetAsync(id);
+            feedback.SetAsRepled(input.Content);
+
+            return ObjectMapper.Map<Feedback, FeedbackDto>(feedback);
+        }
+
         public async Task<FeedbackDto> CreateAsync(FeedbackCreateUpdateDto input)
         {
-            var feedback = new Feedback(GuidGenerator.Create(), CurrentUser?.TenantId, input.Module, input.Company,
-                input.Contact, input.Telephone, input.Email, input.Subject, input.Contact, input.IsReply, input.ReplyContent);
+            var feedback = new Feedback(GuidGenerator.Create(), CurrentTenant.Id, input.Module, input.Company,
+                input.Contact, input.Telephone, input.Email, input.Subject, input.Contact, false, "");
 
             await _repository.InsertAsync(feedback);
 
             return ObjectMapper.Map<Feedback, FeedbackDto>(feedback);
         }
 
-        [Authorize(FeedbackKitPermissions.Feedback.Delete)]
         public async Task DeleteAsync(Guid id)
         {
+            var feedback = await _repository.GetAsync(id);
+
+            if (feedback.CreatorId == CurrentUser.GetId())
+            {
+                await _repository.DeleteAsync(id);
+                return;
+            }
+
+            await AuthorizationService.CheckAsync(FeedbackKitPermissions.Feedback.Default);
             await _repository.DeleteAsync(id);
         }
     }
